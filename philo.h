@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/12 19:49:13 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/02/17 11:51:42 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,24 @@
 
 /* ---------------------------------- STRUCTS ---------------------------------*/
 
+/* ============================================================================
+   FORWARD DECLARATION
+   
+   ¿Por qué necesitamos esto?
+   - t_simu contiene puntero a t_philo (línea 38)
+   - t_philo contiene puntero a t_simu (línea 53)
+   - Dependencia circular → necesitamos declarar uno antes
+   
+   Solución:
+   1. Declarar t_philo primero (typedef struct s_philo t_philo)
+   2. Definir t_simu (que usa t_philo*)
+   3. Definir struct s_philo completa
+   ============================================================================ */
+
+typedef struct s_philo	t_philo;
+
+// ESTRUCTURA PRINCIPAL: t_simu
+// Contiene configuración global de la simulación
 typedef struct s_simu
 {
 	int					n_philo;
@@ -38,6 +56,9 @@ typedef struct s_simu
 	t_philo				*philos;		// proteger stop, meals, etc.
 }	t_simu;
 
+// ESTRUCTURA: t_philo (definición completa)
+// Datos individuales de cada filósofo
+
 typedef struct s_philo
 {
 	int						id;
@@ -49,5 +70,8 @@ typedef struct s_philo
 	t_simu					*simu;
 }	t_philo;
 
+/* ---------------------------------- FUNCTIONS ---------------------------------*/
+
+bool	parse_args(int ac, char **av, t_simu *simu);
 
 #endif
