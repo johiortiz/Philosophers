@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/17 11:51:42 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/02/22 15:43:53 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,19 @@ typedef struct s_philo
 
 /* ---------------------------------- FUNCTIONS ---------------------------------*/
 
+// Parsing
 bool	parse_args(int ac, char **av, t_simu *simu);
+
+// Utils
+long	get_time(void);
+long	get_relative_time(long start_time);
+void	ft_usleep(long ms);
+bool	print_status(t_philo *philo, char *status);
+
+// Init
+bool	init_simu(t_simu *simu);
+void	cleanup_simu(t_simu *simu);
+void	*philosopher(void *data);
+
 
 #endif
