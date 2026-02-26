@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 19:03:02 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 19:34:54 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:47:43 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	*monitor(void *data)
 		}
 		if (check_meals(simu))
 			return (NULL);
-		ft_usleep(1000);
+		ft_usleep(1);
 	}
 	return (NULL);
 }
