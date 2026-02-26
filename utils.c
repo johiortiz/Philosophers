@@ -6,11 +6,25 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:23:43 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/22 14:39:07 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:34:18 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/*
+get_time()
+→ consigo “qué hora es” en ms (desde 1970) usando gettimeofday.
+
+get_relative_time(start)
+→ convierto esa hora enorme en “cuánto tiempo ha pasado desde que empezó la simulación”.
+
+ft_usleep(ms)
+→ duermo aprox ms ms, pero corrigiendo con un bucle para no pasarme demasiado.
+
+print_status(philo, "is eating")
+→ imprimo timestamp id mensaje de forma segura, sin mezclar mensajes y respetando stop.
+*/
 
 /* ============================================================================
    get_time - Obtiene timestamp actual en milisegundos

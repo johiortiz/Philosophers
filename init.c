@@ -6,12 +6,24 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:50:21 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/22 15:43:34 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:45:02 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/* ============================================================================
+   init_simu_memory - Asignar memoria dinámica para forks y philos
+   
+   ¿Por qué malloc()?
+   - n_philo es runtime (argumento ./philo 5)
+   - Necesitamos array dinámico de tamaño variable
+   
+   Orden:
+   1. malloc(n_philo * sizeof(pthread_mutex_t))
+   2. malloc(n_philo * sizeof(t_philo))
+   3. Si falla 2 → free(1) + return false
+============================================================================ */
 static bool	init_simu_memory(t_simu *simu)
 {
 	// 1. Array de mutexes = n_philo forks = n_philo mutex
@@ -69,7 +81,7 @@ static bool	init_philos(t_simu *simu)
 		// CONFIGURAR filósofo i
 		simu->philos[i].id = i + 1;
 		simu->philos[i].meals_eaten = 0;
-		simu->philos[i].last_meal = simu->start_time,
+		simu->philos[i].last_meal = simu->start_time;
 		simu->philos[i].simu = simu;
 		
 		// FORKS CIRCULARES (mesa redonda [file:1])
