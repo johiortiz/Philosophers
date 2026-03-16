@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:23:43 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 18:34:18 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/16 02:42:09 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,11 @@ void	ft_usleep(long ms)
 ============================================================================ */
 bool	print_status(t_philo *philo, char *status)
 {
+   bool is_death;
+   
+   is_death = (strcmp(status, "died") == 0);
 	pthread_mutex_lock(&philo->simu->print_mutex);
-	if (philo->simu->stop)
+	if (philo->simu->stop && !is_death)
 	{
 		pthread_mutex_unlock(&philo->simu->print_mutex);
 		return (false);

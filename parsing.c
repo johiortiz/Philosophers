@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 20:22:55 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/17 12:05:20 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/14 17:55:53 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ static bool	validate_args(t_simu *simu)
 	// must_eat puede ser -1 (no especificado) o > 0
 	if (simu->must_eat == 0)
 	{
-		printf("Error: number_of_times_each_philosopher_must_eat must be positive\n");
+		printf("Error: must_eat must be a valid positive number or omitted\n");
 		return (false);
 	}
 	return (true);
@@ -219,7 +219,7 @@ bool	parse_args(int ac, char **av, t_simu *simu)
 		simu->must_eat = (int)ft_atol(av[5]);
 		if (simu->must_eat == -1)
 		{
-			printf("Error: number_of_times_each_philosopher_must_eat must be a valid positive number\n");
+			printf("Error: must_eat must be a valid positive number or omitted\n");
 			return (false);
 		}
 	}

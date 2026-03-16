@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/14 16:50:50 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/16 02:29:10 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static bool	take_forks(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		if (!print_status(philo, "has taken a fork"))
 		{
-			pthread_mutex_unlock(philo->right_fork);
+			pthread_mutex_unlock(philo->right_fork); 
 			pthread_mutex_unlock(philo->left_fork);
 			return (false);
 		}
@@ -108,8 +108,9 @@ static bool	take_forks(t_philo *philo)
 void	*philosopher(void *data)
 {
 	t_philo	*philo;
-
+	
 	philo = (t_philo *)data;
+	printf("[PPHILO %d STARTED]\n", philo->id);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
 	while (check_alive(philo))
@@ -154,6 +155,7 @@ int	main(int ac, char **av)
 {
 	t_simu	simu;
 	pthread_t	monitor_thread;
+	int	i;
 
 	if (!parse_args(ac, av, &simu))
 		return (1);
@@ -161,6 +163,18 @@ int	main(int ac, char **av)
 	{
 		printf("Error: Failed to initialize\n");
 		return (1);
+	}
+	// Lanzar filósofos
+	i = 0;
+	while (i < simu.n_philo)
+	{
+		if (pthread_create(&simu.philos[i].thread, NULL, philosopher, &simu.philos[i]) != 0)
+		{
+			printf("Error: Failed to create philo thread\n");
+			cleanup_simu(&simu);
+			return (1);
+		}
+		i++;
 	}
 	// Crear monitor thread
 	if (pthread_create(&monitor_thread, NULL, monitor, &simu) != 0)

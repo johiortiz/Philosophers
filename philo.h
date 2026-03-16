@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 19:16:06 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/16 02:41:28 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdbool.h>
+# include <string.h>
 
 /* ---------------------------------- STRUCTS ---------------------------------*/
 
@@ -85,6 +86,7 @@ bool	print_status(t_philo *philo, char *status);
 bool	init_simu(t_simu *simu);
 void	cleanup_simu(t_simu *simu);
 void	*philosopher(void *data);
+bool	init_philos(t_simu *simu);
 
 // Monitor
 void	*monitor(void *data);

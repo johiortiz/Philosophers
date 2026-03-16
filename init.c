@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:50:21 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 18:45:02 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/16 02:40:37 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static bool	init_mutexes(t_simu *simu)
 	return (true);
 }
 
-static bool	init_philos(t_simu *simu)
+bool	init_philos(t_simu *simu)
 {
 	int	i;
 	
@@ -83,19 +83,8 @@ static bool	init_philos(t_simu *simu)
 		simu->philos[i].meals_eaten = 0;
 		simu->philos[i].last_meal = simu->start_time;
 		simu->philos[i].simu = simu;
-		
-		// FORKS CIRCULARES (mesa redonda [file:1])
 		simu->philos[i].left_fork = &simu->forks[i];
 		simu->philos[i].right_fork = &simu->forks[(i + 1) % simu->n_philo];
-		
-		// CREAR THREAD
-		if(pthread_create(&simu->philos[i].thread, NULL, philosopher, &simu->philos[i]) != 0)
-		{
-			// FALLBACK: detach threads creados
-			while (--i >= 0)
-				pthread_detach(simu->philos[i].thread);
-			return (false);
-		}
 		i++;
 	}
 	return (true);
