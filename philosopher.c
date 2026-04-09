@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/16 02:29:10 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/03/18 16:43:10 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	*philosopher(void *data)
 	t_philo	*philo;
 	
 	philo = (t_philo *)data;
-	printf("[PPHILO %d STARTED]\n", philo->id);
+	printf("[PHILO %d STARTED]\n", philo->id);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
 	while (check_alive(philo))
