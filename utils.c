@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:23:43 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/16 02:42:09 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/11 17:35:17 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ long	get_relative_time(long start_time)
 void	ft_usleep(long ms)
 {
 	long	start;
-	
+
 	start = get_time();
 	while ((get_time() - start) < ms)
 		usleep(100);

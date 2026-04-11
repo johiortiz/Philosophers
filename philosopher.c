@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/18 16:43:10 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/11 18:12:45 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void	*philosopher(void *data)
 	t_philo	*philo;
 	
 	philo = (t_philo *)data;
-	printf("[PHILO %d STARTED]\n", philo->id);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
 	while (check_alive(philo))
@@ -182,6 +181,13 @@ int	main(int ac, char **av)
 		printf("Error: Failed to create monitor thread\n");
 		cleanup_simu(&simu);
 		return (1);
+	}
+	i = 0;
+	while (i < simu.n_philo)
+	{
+		if (pthread_join(simu.philos[i].thread, NULL))
+			return (1);
+		i++;
 	}
 	// Esperar a monitor
 	pthread_join(monitor_thread, NULL);

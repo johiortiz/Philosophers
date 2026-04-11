@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 19:03:02 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 22:47:43 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/11 17:59:23 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	check_death(t_simu *simu)
 	}
 	pthread_mutex_unlock(&simu->state_mutex);
 	return (-1);
-}   
+}
 
 /* ============================================================================
    check_meals - Verifica si todos comieron must_eat
@@ -72,7 +72,7 @@ static bool	check_meals(t_simu *simu)
 		i++;
 	}
 	pthread_mutex_unlock(&simu->state_mutex);
-	return (count == simu->n_philo);
+	return (true);
 }
 
 /* ============================================================================
