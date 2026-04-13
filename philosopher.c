@@ -183,6 +183,13 @@ int	main(int ac, char **av)
 		cleanup_simu(&simu);
 		return (1);
 	}
+	i = 0;
+	while (i < simu.n_philo)
+	{
+		if (pthread_join(simu.philos[i].thread, NULL))
+			return (1);
+		i++;
+	}
 	// Esperar a monitor
 	pthread_join(monitor_thread, NULL);
 	// Cleanup

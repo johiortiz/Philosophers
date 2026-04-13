@@ -43,7 +43,7 @@ static int	check_death(t_simu *simu)
 	}
 	pthread_mutex_unlock(&simu->state_mutex);
 	return (-1);
-}   
+}
 
 /* ============================================================================
    check_meals - Verifica si todos comieron must_eat
