@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/11 18:12:45 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/13 18:18:38 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	*philosopher(void *data)
 			pthread_mutex_unlock(philo->right_fork);
 			break ;
 		}
+		printf("Philo %i ha comido: %i\n", philo->id, philo->meals_eaten);
 		ft_usleep(philo->simu->time_to_eat);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);

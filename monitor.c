@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 19:03:02 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/11 17:59:23 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/13 18:26:13 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ static bool	check_meals(t_simu *simu)
 		i++;
 	}
 	pthread_mutex_unlock(&simu->state_mutex);
-	return (true);
+	simu->stop = (count == simu->n_philo);
+	return (count == simu->n_philo);
 }
 
 /* ============================================================================
