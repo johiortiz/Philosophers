@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/13 18:18:38 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/15 20:43:29 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,17 +118,13 @@ void	*philosopher(void *data)
 			break ;
 		if (!take_forks(philo))
 			break ;
-		pthread_mutex_lock(&philo->simu->state_mutex);
-		philo->last_meal = get_time();
-		philo->meals_eaten++;
-		pthread_mutex_unlock(&philo->simu->state_mutex);
+		update_meals(&philo);
 		if (!print_status(philo, "is eating"))
 		{
 			pthread_mutex_unlock(philo->left_fork);
 			pthread_mutex_unlock(philo->right_fork);
 			break ;
 		}
-		printf("Philo %i ha comido: %i\n", philo->id, philo->meals_eaten);
 		ft_usleep(philo->simu->time_to_eat);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
@@ -151,48 +147,4 @@ void	*philosopher(void *data)
    
    Retorna: 0 si todo OK
 ============================================================================ */
-int	main(int ac, char **av)
-{
-	t_simu	simu;
-	pthread_t	monitor_thread;
-	int	i;
 
-	if (!parse_args(ac, av, &simu))
-		return (1);
-	if (!init_simu(&simu))
-	{
-		printf("Error: Failed to initialize\n");
-		return (1);
-	}
-	// Lanzar filósofos
-	i = 0;
-	while (i < simu.n_philo)
-	{
-		if (pthread_create(&simu.philos[i].thread, NULL, philosopher, &simu.philos[i]) != 0)
-		{
-			printf("Error: Failed to create philo thread\n");
-			cleanup_simu(&simu);
-			return (1);
-		}
-		i++;
-	}
-	// Crear monitor thread
-	if (pthread_create(&monitor_thread, NULL, monitor, &simu) != 0)
-	{
-		printf("Error: Failed to create monitor thread\n");
-		cleanup_simu(&simu);
-		return (1);
-	}
-	i = 0;
-	while (i < simu.n_philo)
-	{
-		if (pthread_join(simu.philos[i].thread, NULL))
-			return (1);
-		i++;
-	}
-	// Esperar a monitor
-	pthread_join(monitor_thread, NULL);
-	// Cleanup
-	cleanup_simu(&simu);
-	return (0);
-}

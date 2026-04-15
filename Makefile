@@ -8,7 +8,10 @@ SRCS = parsing.c \
 	   utils.c \
 	   init.c \
 	   philosopher.c \
-	   monitor.c
+	   monitor.c \
+	   main.c \
+	   utils_philo.c
+
 OBJS = $(SRCS:.c=.o)
 HEADER = philo.h
 

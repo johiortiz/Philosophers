@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/16 02:41:28 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/15 20:43:50 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ bool	init_philos(t_simu *simu);
 
 // Monitor
 void	*monitor(void *data);
-
+void	update_meals(t_philo **philo);
 
 
 #endif
