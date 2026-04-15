@@ -6,31 +6,17 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:50:21 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/11 17:26:06 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 00:10:12 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* ============================================================================
-   init_simu_memory - Asignar memoria dinámica para forks y philos
-   
-   ¿Por qué malloc()?
-   - n_philo es runtime (argumento ./philo 5)
-   - Necesitamos array dinámico de tamaño variable
-   
-   Orden:
-   1. malloc(n_philo * sizeof(pthread_mutex_t))
-   2. malloc(n_philo * sizeof(t_philo))
-   3. Si falla 2 → free(1) + return false
-============================================================================ */
 static bool	init_simu_memory(t_simu *simu)
 {
-	// 1. Array de mutexes = n_philo forks = n_philo mutex
 	simu->forks = malloc(simu->n_philo * sizeof(pthread_mutex_t));
 	if (!simu->forks)
 		return (false);
-	// 2. Array de filósofos: n_philo filósofos
 	simu->philos = malloc(simu->n_philo * sizeof(t_philo));
 	if (!simu->philos)
 	{
@@ -44,22 +30,18 @@ static bool	init_mutexes(t_simu *simu)
 {
 	int	i;
 
-	// 1. Mutex para printf (evitar mensajes mezclados [file:1])
 	if (pthread_mutex_init(&simu->print_mutex, NULL) != 0)
 		return (false);
-	// 2. Mutex para datos compartidos (stop, last_meal)
 	if (pthread_mutex_init(&simu->state_mutex, NULL) != 0)
 	{
 		pthread_mutex_destroy(&simu->print_mutex);
 		return (false);
 	}
-	// 3. Array de forks (n_philo mutexes)
-	i  = 0;
+	i = 0;
 	while (i < simu->n_philo)
 	{
 		if (pthread_mutex_init(&simu->forks[i], NULL) != 0)
 		{
-			// Limpiar TODOS los mutexes creados
 			while (--i >= 0)
 				pthread_mutex_destroy(&simu->forks[i]);
 			pthread_mutex_destroy(&simu->print_mutex);
@@ -74,11 +56,10 @@ static bool	init_mutexes(t_simu *simu)
 bool	init_philos(t_simu *simu)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < simu->n_philo)
 	{
-		// CONFIGURAR filósofo i
 		simu->philos[i].id = i + 1;
 		simu->philos[i].meals_eaten = 0;
 		simu->philos[i].last_meal = simu->start_time;

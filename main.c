@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 20:21:35 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 20:36:56 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/15 23:11:37 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static int	create_mon(t_simu *simu)
 {
-	int 	i;
+	int	i;
 
-	
 	i = 0;
 	while (i < simu->n_philo)
 	{
@@ -48,8 +47,8 @@ static int	create_thread(t_simu *simu)
 
 int	main(int ac, char **av)
 {
-	t_simu	simu;
-	pthread_t	monitor_thread;
+	t_simu			simu;
+	pthread_t		monitor_thread;
 
 	if (!parse_args(ac, av, &simu))
 		return (1);

@@ -6,21 +6,12 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 20:43:29 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 00:06:21 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* ============================================================================
-   check_alive - Verifica si simulación sigue viva
-   
-   Protegido por state_mutex:
-   - simu->stop = true → alguien murió
-   - También chequea su propia última comida
-   
-   Retorna: false si debe parar
-============================================================================ */
 static bool	check_alive(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->simu->state_mutex);
@@ -33,82 +24,45 @@ static bool	check_alive(t_philo *philo)
 	return (true);
 }
 
-/* ============================================================================
-   take_forks - Coger ambos tenedores
-   
-   Orden DINÁMICO anti-deadlock:
-   - Impares: left → right
-   - Pares: right → left
-   
-   Retorna: false si no puede coger ambos
-============================================================================ */
+static bool	single_fork(t_philo *philo)
+{
+	pthread_mutex_lock(philo->left_fork);
+	if (!print_status(philo, "has taken a fork"))
+		return (pthread_mutex_unlock(philo->right_fork), false);
+	while (check_alive(philo))
+		ft_usleep(1);
+	return (pthread_mutex_unlock(philo->left_fork), false);
+}
+
 static bool	take_forks(t_philo *philo)
 {
 	if (philo->left_fork == philo->right_fork)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		if (!print_status(philo, "has taken a fork"))
-		{
-			pthread_mutex_unlock(philo->right_fork);
-			return (false);
-		}
-		while (check_alive(philo))
-			ft_usleep(1);
-		pthread_mutex_unlock(philo->left_fork);
-		return (false);
-	}
+		return (single_fork(philo));
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
 		if (!print_status(philo, "has taken a fork"))
-		{
-			pthread_mutex_unlock(philo->right_fork);
-			return (false);
-		}
+			return (pthread_mutex_unlock(philo->right_fork), false);
 		pthread_mutex_lock(philo->left_fork);
 		if (!print_status(philo, "has taken a fork"))
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			pthread_mutex_unlock(philo->right_fork);
-			return (false);
-		}
+			return (drop_forks(philo), false);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
 		if (!print_status(philo, "has taken a fork"))
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			return (false);
-		}
+			return (pthread_mutex_unlock(philo->left_fork), false);
 		pthread_mutex_lock(philo->right_fork);
 		if (!print_status(philo, "has taken a fork"))
-		{
-			pthread_mutex_unlock(philo->right_fork); 
-			pthread_mutex_unlock(philo->left_fork);
-			return (false);
-		}
+			return (drop_forks(philo), false);
 	}
 	return (true);
 }
 
-/* ============================================================================
-   philosopher - Rutina principal del filósofo
-   
-   Ciclo infinito:
-   THINK → TAKE_FORKS → EAT → SLEEP → THINK → ...
-   
-   Para en:
-   - check_alive() = false (muerte detectada)
-   - take_forks() = false (no pudo comer)
-   - print_status() = false
-   
-   Retorna NULL
-============================================================================ */
 void	*philosopher(void *data)
 {
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)data;
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
@@ -121,30 +75,14 @@ void	*philosopher(void *data)
 		update_meals(&philo);
 		if (!print_status(philo, "is eating"))
 		{
-			pthread_mutex_unlock(philo->left_fork);
-			pthread_mutex_unlock(philo->right_fork);
+			drop_forks(philo);
 			break ;
 		}
 		ft_usleep(philo->simu->time_to_eat);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		drop_forks(philo);
 		if (!print_status(philo, "is sleeping"))
 			break ;
 		ft_usleep(philo->simu->time_to_sleep);
 	}
 	return (NULL);
 }
-
-/* ============================================================================
-   main - Flujo principal del programa
-   
-   Secuencia:
-   1. parse_args() → leer argumentos
-   2. init_simu() → malloc + mutexes + threads filósofos
-   3. pthread_create(monitor) → thread de detección
-   4. pthread_join(monitor) → esperar fin simulación
-   5. cleanup_simu() → join filósofos + free todo
-   
-   Retorna: 0 si todo OK
-============================================================================ */
-
