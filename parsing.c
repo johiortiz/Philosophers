@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 20:22:55 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 18:20:02 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 00:09:51 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ static long	ft_atol(const char *str)
 	if (str[i] == '+')
 		i++;
 	else if (str[i] == '-')
-		return (-1);
-	if (!str[i])
 		return (-1);
 	while (str[i])
 	{
@@ -80,8 +78,8 @@ bool	parse_args(int ac, char **av, t_simu *simu)
 	simu->time_to_die = ft_atol(av[2]);
 	simu->time_to_eat = ft_atol(av[3]);
 	simu->time_to_sleep = ft_atol(av[4]);
-	if (simu->n_philo == -1 || simu->time_to_die == -1 || simu->time_to_eat
-		== -1 || simu->time_to_sleep == -1)
+	if (simu->n_philo == -1 || simu->time_to_die == -1
+		|| simu->time_to_eat == -1 || simu->time_to_sleep == -1)
 		return (printf("Error: Arguments must be valid positive numbers\n"),
 			false);
 	if (ac == 6)
@@ -95,6 +93,6 @@ bool	parse_args(int ac, char **av, t_simu *simu)
 		simu->must_eat = -1;
 	if (!validate_args(simu))
 		return (false);
-	return (simu->stop = false, simu->start_time = 0,
-		simu->forks = NULL, simu->philos = NULL, true);
+	return (simu->stop = false, simu->start_time = 0, simu->forks = NULL,
+		simu->philos = NULL, true);
 }

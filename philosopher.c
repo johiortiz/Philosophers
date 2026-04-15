@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 19:12:27 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 00:06:21 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,39 @@ static bool	check_alive(t_philo *philo)
 	return (true);
 }
 
-static bool	single_philo(t_philo *philo)
+static bool	single_fork(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	if (!print_status(philo, "has taken a fork"))
 		return (pthread_mutex_unlock(philo->right_fork), false);
 	while (check_alive(philo))
 		ft_usleep(1);
-	pthread_mutex_unlock(philo->left_fork);
-	return (false);
-}
-
-static bool	lock_forks(t_philo *philo, pthread_mutex_t *first,
-	pthread_mutex_t *second)
-{
-	pthread_mutex_lock(first);
-	if (!print_status(philo, "has taken a fork"))
-		return (pthread_mutex_unlock(first), false);
-	pthread_mutex_lock(second);
-	if (!print_status(philo, "has taken a fork"))
-		return (pthread_mutex_unlock(second),
-			pthread_mutex_unlock(first), false);
-	return (true);
+	return (pthread_mutex_unlock(philo->left_fork), false);
 }
 
 static bool	take_forks(t_philo *philo)
 {
 	if (philo->left_fork == philo->right_fork)
-		return (single_philo(philo));
+		return (single_fork(philo));
 	if (philo->id % 2 == 0)
-		return (lock_forks(philo, philo->right_fork, philo->left_fork));
-	return (lock_forks(philo, philo->left_fork, philo->right_fork));
+	{
+		pthread_mutex_lock(philo->right_fork);
+		if (!print_status(philo, "has taken a fork"))
+			return (pthread_mutex_unlock(philo->right_fork), false);
+		pthread_mutex_lock(philo->left_fork);
+		if (!print_status(philo, "has taken a fork"))
+			return (drop_forks(philo), false);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left_fork);
+		if (!print_status(philo, "has taken a fork"))
+			return (pthread_mutex_unlock(philo->left_fork), false);
+		pthread_mutex_lock(philo->right_fork);
+		if (!print_status(philo, "has taken a fork"))
+			return (drop_forks(philo), false);
+	}
+	return (true);
 }
 
 void	*philosopher(void *data)
@@ -70,6 +72,14 @@ void	*philosopher(void *data)
 			break ;
 		if (!take_forks(philo))
 			break ;
+		update_meals(&philo);
+		if (!print_status(philo, "is eating"))
+		{
+			drop_forks(philo);
+			break ;
+		}
+		ft_usleep(philo->simu->time_to_eat);
+		drop_forks(philo);
 		if (!print_status(philo, "is sleeping"))
 			break ;
 		ft_usleep(philo->simu->time_to_sleep);

@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 19:12:21 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/15 23:15:03 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <stdbool.h>
 # include <string.h>
 
-/* ------------------------- STRUCTS -------------------------------*/
+/* ---------------------------- STRUCTS ---------------------------------*/
 
 typedef struct s_philo	t_philo;
 
@@ -52,7 +52,7 @@ typedef struct s_philo
 	t_simu					*simu;
 }	t_philo;
 
-/* ----------------------------- FUNCTIONS ---------------------------*/
+/* -------------------------- FUNCTIONS ---------------------------------*/
 
 bool	parse_args(int ac, char **av, t_simu *simu);
 long	get_time(void);
@@ -64,9 +64,7 @@ void	cleanup_simu(t_simu *simu);
 void	*philosopher(void *data);
 bool	init_philos(t_simu *simu);
 void	*monitor(void *data);
-bool	do_eat(t_philo *philo);
-int		create_threads(t_simu *simu, pthread_t *mon);
-int		join_threads(t_simu *simu, pthread_t mon);
-
+void	update_meals(t_philo **philo);
+void	drop_forks(t_philo *philo);
 
 #endif

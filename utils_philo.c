@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   utils_philo.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/02/26 19:41:27 by johyorti         ###   ########.fr       */
+/*   Created: 2026/04/15 20:39:03 by johyorti          #+#    #+#             */
+/*   Updated: 2026/04/16 00:09:01 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*philosopher(void *data)
+void	update_meals(t_philo **philo)
 {
-	t_philo	*philo;
+	pthread_mutex_lock(&(*philo)->simu->state_mutex);
+	(*philo)->last_meal = get_time();
+	(*philo)->meals_eaten++;
+	pthread_mutex_unlock(&(*philo)->simu->state_mutex);
+}
 
-	philo = (t_philo *)data;
-	print_status(philo, "test thread started");
-	return (NULL);
+void	drop_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 }
