@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/03/16 02:41:28 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:12:21 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,10 @@
 # include <stdbool.h>
 # include <string.h>
 
-/* ---------------------------------- STRUCTS ---------------------------------*/
-
-/* ============================================================================
-   FORWARD DECLARATION
-   
-   ¿Por qué necesitamos esto?
-   - t_simu contiene puntero a t_philo (línea 38)
-   - t_philo contiene puntero a t_simu (línea 53)
-   - Dependencia circular → necesitamos declarar uno antes
-   
-   Solución:
-   1. Declarar t_philo primero (typedef struct s_philo t_philo)
-   2. Definir t_simu (que usa t_philo*)
-   3. Definir struct s_philo completa
-   ============================================================================ */
+/* ------------------------- STRUCTS -------------------------------*/
 
 typedef struct s_philo	t_philo;
 
-// ESTRUCTURA PRINCIPAL: t_simu
-// Contiene configuración global de la simulación
 typedef struct s_simu
 {
 	int					n_philo;
@@ -49,16 +33,13 @@ typedef struct s_simu
 	long				time_to_eat;
 	long				time_to_sleep;
 	long				start_time;
-	int					must_eat;		// por ejemplo -1 no existe
-	bool				stop;			// flag: alguien murió o todos comieron
-	pthread_mutex_t		*forks;			// array de N mutex (uno por tenedor)
-	pthread_mutex_t		print_mutex;	// proteger printf/write
-	pthread_mutex_t		state_mutex;	// para stop + datos compartidos
-	t_philo				*philos;		// proteger stop, meals, etc.
+	int					must_eat;
+	bool				stop;
+	pthread_mutex_t		*forks;
+	pthread_mutex_t		print_mutex;
+	pthread_mutex_t		state_mutex;
+	t_philo				*philos;
 }	t_simu;
-
-// ESTRUCTURA: t_philo (definición completa)
-// Datos individuales de cada filósofo
 
 typedef struct s_philo
 {
@@ -71,26 +52,21 @@ typedef struct s_philo
 	t_simu					*simu;
 }	t_philo;
 
-/* ---------------------------------- FUNCTIONS ---------------------------------*/
+/* ----------------------------- FUNCTIONS ---------------------------*/
 
-// Parsing
 bool	parse_args(int ac, char **av, t_simu *simu);
-
-// Utils
 long	get_time(void);
 long	get_relative_time(long start_time);
 void	ft_usleep(long ms);
 bool	print_status(t_philo *philo, char *status);
-
-// Init
 bool	init_simu(t_simu *simu);
 void	cleanup_simu(t_simu *simu);
 void	*philosopher(void *data);
 bool	init_philos(t_simu *simu);
-
-// Monitor
 void	*monitor(void *data);
-
+bool	do_eat(t_philo *philo);
+int		create_threads(t_simu *simu, pthread_t *mon);
+int		join_threads(t_simu *simu, pthread_t mon);
 
 
 #endif
