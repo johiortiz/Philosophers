@@ -6,13 +6,13 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/16 18:57:25 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 20:24:43 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static bool	check_alive(t_philo *philo)
+bool	check_alive(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->simu->state_mutex);
 	if (philo->simu->stop)
@@ -72,17 +72,10 @@ void	*philosopher(void *data)
 			break ;
 		if (!take_forks(philo))
 			break ;
-		update_meals(&philo);
-		if (!print_status(philo, "is eating"))
-		{
-			drop_forks(philo);
+		if (!eat_philo(philo))
 			break ;
-		}
-		ft_usleep(philo->simu->time_to_eat);
-		drop_forks(philo);
-		if (!print_status(philo, "is sleeping"))
+		if (!sleep_and_check(philo))
 			break ;
-		ft_usleep(philo->simu->time_to_sleep);
 	}
 	return (NULL);
 }

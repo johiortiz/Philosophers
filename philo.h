@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/16 13:33:28 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 20:25:12 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,7 @@ bool	init_philos(t_simu *simu);
 void	*monitor(void *data);
 void	update_meals(t_philo **philo);
 void	drop_forks(t_philo *philo);
+bool	eat_philo(t_philo *philo);
+bool	sleep_and_check(t_philo *philo);
 
 #endif
