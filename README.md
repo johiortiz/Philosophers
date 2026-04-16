@@ -1,85 +1,71 @@
 # Philosophers
+*This project was created as part of the 42 curriculum by [your name].*
 
-*Este proyecto ha sido creado como parte del currículo de 42 por johiortiz.*
+## Description
 
-## Descripción
+Philosophers is an implementation of the classic **Dining Philosophers Problem**,
+originally formulated by Dijkstra. N philosophers sit at a circular table and alternate
+between thinking, picking up forks, eating, and sleeping. The challenge is to ensure
+that no philosopher starves, while avoiding deadlocks and data races at all times.
 
-**Philosophers** es un proyecto clásico de concurrencia basado en el problema de los *filósofos comensales* (Dining Philosophers). El objetivo es diseñar y programar una simulación con múltiples hilos/procesos donde varios filósofos alternan entre pensar, comer y dormir, compartiendo recursos limitados (tenedores) sin caer en **interbloqueo (deadlock)**, **inanición (starvation)** ni condiciones de carrera.
+The program spawns one POSIX thread (`pthread`) per philosopher, plus an independent
+monitor thread. Forks and all shared simulation state are protected by mutexes to
+prevent race conditions.
 
-En este repositorio encontrarás una implementación en **C** (con compilación mediante **Makefile**) que pone en práctica:
+## Instructions
 
-- Sincronización con primitivas (por ejemplo, mutex/semáforos según la versión del proyecto).
-- Gestión correcta del tiempo y estados del sistema.
-- Manejo de errores y liberación de recursos.
-
-## Instrucciones
-
-
-### Requisitos
-
-- `gcc` o `clang`
-- `make`
-- (Linux/macOS) soporte de hilos (p. ej. `pthread`)
-
-### Compilación
+### Compilation
 
 ```bash
 make
 ```
 
-Para limpiar archivos generados:
+### Usage
 
 ```bash
-make clean
-make fclean
+./philo <num_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [must_eat]
 ```
 
-### Ejecución
+All time values are in **milliseconds**. The `must_eat` argument is optional:
+if provided, the simulation stops once every philosopher has eaten that many times.
 
-Normalmente el programa se ejecuta indicando parámetros como:
+### Examples
 
-- número de filósofos
-- `time_to_die`
-- `time_to_eat`
-- `time_to_sleep`
-- (opcional) número de veces que cada filósofo debe comer
+| Command | Expected result |
+|---|---|
+| `./philo 1 800 200 200` | The philosopher dies (~800 ms) |
+| `./philo 5 800 200 200` | No one dies, runs indefinitely |
+| `./philo 4 410 200 200` | No one dies (10 ms margin) |
+| `./philo 5 800 200 200 7` | Stops after every philosopher eats 7 times |
+| `./philo 4 310 200 100` | A philosopher dies (~310 ms) |
 
-Ejemplo típico:
+### Quick Validation Rule
 
-```bash
-./philo 5 800 200 200
-```
+- `time_to_eat + time_to_sleep < time_to_die` → no philosopher should die
+- `time_to_eat + time_to_sleep >= time_to_die` → a philosopher will die
 
-Con número mínimo de comidas:
+## Resources
 
-```bash
-./philo 5 800 200 200 7
-```
+### References
 
-Si tu repositorio incluye la versión *bonus*:
+- [The Dining Philosophers Problem — Wikipedia](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
+- [POSIX Threads Programming — LLNL HPC](https://hpc-tutorials.llnl.gov/posix/)
+- [`pthread_mutex_lock` — Linux man pages](https://man7.org/linux/man-pages/man3/pthread_mutex_lock.3p.html)
+- [Philosophers 42 Guide — The Dining Philosophers Problem] (https://medium.com/@ruinadd/philosophers-42-guide-the-dining-philosophers-problem-893a24bc0fe2)
+- [42-cursus.gitbook.io - Philosophers] (https://42-cursus.gitbook.io/guide/3-rank-03/philosophers)
+- [fran byte | 42 - Introducción al Proyecto Philosophers] (https://42-fran-byte-f94097.gitlab.io/docs/philosophers/philosophers-approach-es/#/)
 
-```bash
-make bonus
-./philo_bonus 5 800 200 200
-```
+### AI Usage
 
-## Recursos
+**Tool used:** Perplexity AI, as a pedagogical assistant.
 
-### Referencias sobre concurrencia y el problema de los filósofos
+| Area | Tasks where AI was used |
+|---|---|
+| Problem understanding | Explanation of the dining philosophers problem, difference between deadlock and data race, need for mutexes |
+| Logical design | Thread structure (N philosophers + monitor + main), `philosopher()` flow, monitor logic |
+| Debugging | Bug in `check_death` (timestamp comparison and `last_meal` update), `meals_eaten` overshoot, Norminette errors |
+| Testing | Design of a test suite for correct death timing, no-deadlock cases, and `must_eat` termination |
+| Key functions | Understanding of `ft_usleep`, `get_time`, and mutex patterns protecting `stop`, `last_meal`, and `meals_eaten` |
 
-- E. W. Dijkstra — *The Dining Philosophers Problem* (planteamiento clásico del problema).
-- Documentación POSIX Threads (pthreads): mutexes, threads y sincronización.
-- Semáforos POSIX (`sem_*`) (útil para implementaciones basadas en procesos).
-- *Operating Systems: Three Easy Pieces (OSTEP)* — capítulos de concurrencia y sincronización.
-- Artículos/guías sobre deadlock, starvation y estrategias de prevención (orden de recursos, jerarquía de locks, etc.).
-
-### Uso de IA
-
-Este proyecto **puede haberse apoyado en herramientas de IA** para tareas puntuales como:
-
-- Revisión del formato del README y redacción (documentación).
-- Recordatorio/consulta de conceptos teóricos de concurrencia (deadlock/starvation) y prácticas recomendadas.
-
-**No se ha utilizado IA** para generar automáticamente la lógica central del programa (sincronización/algoritmo) ni para escribir código fuente de producción sin revisión; cualquier sugerencia se ha validado manualmente mediante pruebas y lectura del código.
-
----
+AI did not write any project code. Its use was strictly explanatory and for logical
+guidance to understand the concepts involved.

@@ -7,6 +7,7 @@
 *.obj
 *.elf
 
+
 # Linker output
 *.ilk
 *.map
@@ -53,3 +54,4 @@ dkms.conf
 
 # debug information files
 *.dwo
+
