@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 20:21:35 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/16 12:49:49 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 18:33:25 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static int	create_thread(t_simu *simu)
 {
 	int	i;
 
+	simu->start_time = get_time();
 	i = 0;
 	while (i < simu->n_philo)
 	{
