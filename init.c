@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 14:50:21 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/16 00:10:12 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 12:46:06 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ static bool	init_mutexes(t_simu *simu)
 	{
 		if (pthread_mutex_init(&simu->forks[i], NULL) != 0)
 		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&simu->forks[i]);
-			pthread_mutex_destroy(&simu->print_mutex);
-			pthread_mutex_destroy(&simu->state_mutex);
+			cleanup_forks(simu, i);
 			return (false);
 		}
 		i++;
@@ -71,26 +68,16 @@ bool	init_philos(t_simu *simu)
 	return (true);
 }
 
-void	cleanup_simu(t_simu *simu)
+void	cleanup_forks(t_simu *simu, int count)
 {
-	int	i;
-
-	i = 0;
-	while (i < simu->n_philo)
-	{
-		pthread_join(simu->philos[i].thread, NULL);
-		i++;
-	}
-	i = 0;
-	while (i < simu->n_philo)
-	{
-		pthread_mutex_destroy(&simu->forks[i]);
-		i++;
-	}
+	while (count-- > 0)
+		pthread_mutex_destroy(&simu->forks[count]);
 	pthread_mutex_destroy(&simu->print_mutex);
 	pthread_mutex_destroy(&simu->state_mutex);
-	free(simu->forks);
-	free(simu->philos);
+	if (simu->forks)
+		free(simu->forks);
+	if (simu->philos)
+		free(simu->philos);
 }
 
 bool	init_simu(t_simu *simu)
@@ -106,7 +93,7 @@ bool	init_simu(t_simu *simu)
 	simu->start_time = get_time();
 	if (!init_philos(simu))
 	{
-		cleanup_simu(simu);
+		cleanup_forks(simu, simu->n_philo);
 		return (false);
 	}
 	return (true);

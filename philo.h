@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:11 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 23:15:03 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 12:38:40 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ long	get_relative_time(long start_time);
 void	ft_usleep(long ms);
 bool	print_status(t_philo *philo, char *status);
 bool	init_simu(t_simu *simu);
-void	cleanup_simu(t_simu *simu);
+void	cleanup_forks(t_simu *simu, int count);
 void	*philosopher(void *data);
 bool	init_philos(t_simu *simu);
 void	*monitor(void *data);

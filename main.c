@@ -6,13 +6,13 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 20:21:35 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/15 23:11:37 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 12:49:49 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	create_mon(t_simu *simu)
+static int	join_philos(t_simu *simu)
 {
 	int	i;
 
@@ -37,7 +37,7 @@ static int	create_thread(t_simu *simu)
 				philosopher, &simu->philos[i]) != 0)
 		{
 			printf("Error: Failed to create philo thread\n");
-			cleanup_simu(simu);
+			cleanup_forks(simu, simu->n_philo);
 			return (0);
 		}
 		i++;
@@ -62,12 +62,12 @@ int	main(int ac, char **av)
 	if (pthread_create(&monitor_thread, NULL, monitor, &simu) != 0)
 	{
 		printf("Error: Failed to create monitor thread\n");
-		cleanup_simu(&simu);
+		cleanup_forks(&simu, simu.n_philo);
 		return (1);
 	}
-	if (!create_mon(&simu))
+	if (!join_philos(&simu))
 		return (1);
 	pthread_join(monitor_thread, NULL);
-	cleanup_simu(&simu);
+	cleanup_forks(&simu, simu.n_philo);
 	return (0);
 }

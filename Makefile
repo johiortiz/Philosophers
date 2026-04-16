@@ -5,12 +5,12 @@ CFLAGS = -Wall -Werror -Wextra -g
 LIBS = -lpthread
 
 SRCS = parsing.c \
-	   utils.c \
-	   init.c \
-	   philosopher.c \
-	   monitor.c \
-	   main.c \
-	   utils_philo.c
+       utils.c \
+       init.c \
+       philosopher.c \
+       monitor.c \
+       main.c \
+       utils_philo.c
 
 OBJS = $(SRCS:.c=.o)
 HEADER = philo.h
@@ -23,6 +23,12 @@ $(NAME): $(OBJS)
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+leaks: $(SRCS) $(HEADER)
+	$(CC) -g -fsanitize=address $(SRCS) $(LIBS) -o $(NAME)
+
+thread: $(SRCS) $(HEADER)
+	$(CC) -g -fsanitize=thread $(SRCS) $(LIBS) -o $(NAME)
+
 clean:
 	rm -f $(OBJS)
 
@@ -31,4 +37,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re leaks thread

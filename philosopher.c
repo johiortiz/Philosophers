@@ -6,7 +6,7 @@
 /*   By: johyorti <johyorti@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:55:15 by johyorti          #+#    #+#             */
-/*   Updated: 2026/04/16 00:06:21 by johyorti         ###   ########.fr       */
+/*   Updated: 2026/04/16 12:55:47 by johyorti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,7 @@ static bool	take_forks(t_philo *philo)
 	if (philo->left_fork == philo->right_fork)
 		return (single_fork(philo));
 	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->right_fork);
-		if (!print_status(philo, "has taken a fork"))
-			return (pthread_mutex_unlock(philo->right_fork), false);
-		pthread_mutex_lock(philo->left_fork);
-		if (!print_status(philo, "has taken a fork"))
-			return (drop_forks(philo), false);
-	}
+		ft_usleep(philo->simu->time_to_eat / 2);
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
